@@ -8,6 +8,10 @@
  * Ciro Nicolas Molina
  *
  */
-public static void main(String[] args) {
+public class TPI{
+
+    public static void main(String[] args) {
     
+    }
+
 }
