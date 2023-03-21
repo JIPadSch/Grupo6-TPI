@@ -1,9 +1,6 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Scanner;
 
 /**
@@ -25,16 +22,35 @@ public class TPI{
         try {
 
             Scanner scan = new Scanner(System.in);
+            
             BufferedReader lectorResultados = new BufferedReader(new FileReader("src\\Archivos\\resultados.csv"));
             BufferedReader lectorPronosticos = new BufferedReader(new FileReader("src\\Archivos\\pronosticos.csv"));
 
             System.out.println("Ingrese el nombre de la Persona:");
             Persona pers = new Persona(scan.nextLine());
 
+            sumarMostrarResultadoPronostico(lectorResultados, lectorPronosticos, pers);
+
+            scan.close();
+            lectorPronosticos.close();
+            lectorResultados.close();
+
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+
+    
+    }
+
+    public static void sumarMostrarResultadoPronostico(BufferedReader lectorResultados, BufferedReader lectorPronosticos, Persona pers){
+
+        try {
+
             String lineaPronosticos;
 
-			while ((lineaPronosticos = lectorPronosticos.readLine()) != null){
-                //Leo linea del archivo y la separo con split (";") en un arreglo
+			while ((lineaPronosticos = lectorPronosticos.readLine()) != null){ //Si la linea no es nula
+                String lineaResultados = lectorResultados.readLine();
+
 				String[] arrPronosticoLinea = lineaPronosticos.split(";"); 
                 /* Formato de posición de la información:
                  * EQUIPO 1;GANA E1;EMPATE;GANA E2;EQUIPO2
@@ -42,8 +58,6 @@ public class TPI{
                  * necesito la información provista de las posiciones 1 a la 3, donde según donde este marcada
                  * la "X" me dirá cuál equipo marcó como ganador
                  */
-                
-                String lineaResultados = lectorResultados.readLine();
                 String[] arrResultadoLinea = lineaResultados.split(";");
                 /* Misma lógica que en pronosticos, con resultados tmb separamos por ";" en un arreglo,
                  * pero la información dada acá es distinta, nos dice el resultado (en goles de cada equipo),
@@ -71,15 +85,12 @@ public class TPI{
 			}
 
             System.out.println(pers.toString());
-            scan.close();
-            lectorPronosticos.close();
-            lectorResultados.close();
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    
+
     }
 
 }
