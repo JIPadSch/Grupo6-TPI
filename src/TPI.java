@@ -5,13 +5,11 @@ import java.util.Scanner;
 
 /**
  * @author 
- * Nicolas Guidara
  * Juan Ignacio Padron Schneider
- * Victoria de Goycochea
- * Javier Peron
- * Gabriel Alberto Ferreyra
- * Ciro Nicolas Molina
- *
+ * Victoria de Goycoechea
+ * Maximiliano Sorano
+ * Agustina Birn
+ * Mailen da Silva
  */
 
 public class TPI{

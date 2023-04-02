@@ -1,11 +1,11 @@
-Integrantes del Grupo:
+# Integrantes del Grupo:
 Juan Ignacio Padron Schneider
 Victoria de Goycoechea
 Maximiliano Sorano
 Agustina Birn
 Mailen da Silva
 
-Devolución del Profesor en la 1ra Entrega:
+## Devolución del Profesor en la 1ra Entrega:
 
 Hola grupo, muy buen trabajo.
 Algunas cosas a tener en cuenta:
@@ -22,5 +22,5 @@ El trabajo fue entregado en tiempo y forma.
 Muy bien chicos! Felicitaciones! sigan así para la próxima entrega. 
 Intenten trabajar entre todos para pensar la nueva solución.
 
-Devolución del Profesor en la 2da Entrega:
+## Devolución del Profesor en la 2da Entrega:
 ...
