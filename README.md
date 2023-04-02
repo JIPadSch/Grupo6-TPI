@@ -1,9 +1,9 @@
 # Integrantes del Grupo:
-Juan Ignacio Padron Schneider
-Victoria de Goycoechea
-Maximiliano Sorano
-Agustina Birn
-Mailen da Silva
+- Juan Ignacio Padron Schneider
+- Victoria de Goycoechea
+- Maximiliano Sorano
+- Agustina Birn
+- Mailen da Silva
 
 ## Devolución del Profesor en la 1ra Entrega:
 
