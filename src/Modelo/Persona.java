@@ -23,6 +23,10 @@ public class Persona {
         return this.puntaje;
     }
 
+    public Pronostico getPronostico(){
+        return this.pronosticoPartidos;
+    }
+
     /* MODIFICADORES */
 
     public void setPuntaje(int puntajeNuevo){

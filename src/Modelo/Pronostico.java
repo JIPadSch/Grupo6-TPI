@@ -12,6 +12,12 @@ public class Pronostico {
         this.arrayListPartidos = new ArrayList<>();
     }
 
+    /* OBSERVADOR */
+
+    public int eleccionPronostico(int posicion){
+        return this.arrayListPartidos.get(posicion).getResultado();
+    }
+
     /* MODIFICADOR */
 
     public void agregarPartido(Equipo e1, Equipo e2, int eleccionPronostico){
