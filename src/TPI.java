@@ -34,7 +34,7 @@ public class TPI {
             mostrarPuntajePersonas();
 
         } catch (Exception e) {
-            // TODO: handle exception
+            System.out.println(e.getMessage()+": en el MAIN");
         }
 
     }
@@ -116,7 +116,7 @@ public class TPI {
             }
             
         } catch (Exception e) {
-            // TODO: handle exception
+            System.out.println(e.getMessage()+": en recorrerArchivoPronostico");
         }
             
 
@@ -175,7 +175,7 @@ public class TPI {
             }
             
         } catch (Exception e) {
-            // TODO: handle exception
+            System.out.println(e.getMessage()+": en recorrerArchivoResultado");
         }
 
  
