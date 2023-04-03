@@ -3,7 +3,7 @@ public class Partido {
 
     private Equipo equipo1;
     private Equipo equipo2;
-    private int resultado; //Gano equipo 1 = -1, gano equipo 2 = 1, empate = 0
+    private int resultado; //GANO EQUIPO 1 = -1, GANO EQUIPO 2 = 1, EMPATE = 0
 
     /* CONSTRUCTOR */
 

@@ -10,6 +10,7 @@ public class Persona {
     public Persona(String nombre){
         this.nombre = nombre;
         this.puntaje = 0;
+        this.pronosticoPartidos = new Pronostico();
     }
 
     /* OBSERVADORES */

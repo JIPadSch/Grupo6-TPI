@@ -2,21 +2,21 @@ package Modelo;
 
 import java.util.ArrayList;
 
-public class Pronostico {
+public class Ronda {
 
     private ArrayList<Partido> arrayListPartidos;
 
     /* CONSTRUCTOR */
 
-    public Pronostico(){
+    public Ronda(){
         this.arrayListPartidos = new ArrayList<>();
     }
 
-    /* MODIFICADOR */
+    /* PROPIO DEL TIPO */
 
-    public void agregarPartido(Equipo e1, Equipo e2, int eleccionPronostico){
+    public void agregarPartido(Equipo e1, Equipo e2, int resultado){
         Partido partido = new Partido(e1, e2);
-        partido.setResultado(eleccionPronostico);
+        partido.setResultado(resultado);
         this.arrayListPartidos.add(partido);
     }
     

@@ -2,11 +2,11 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 import Modelo.Equipo;
 import Modelo.Partido;
 import Modelo.Persona;
+import Modelo.Ronda;
 
 /**
  * @author
@@ -21,36 +21,8 @@ public class TPI {
 
     public static ArrayList<Equipo> todosLosEquipos = new ArrayList<>();   // Instanciare y guardare los Equipos acá
     public static ArrayList<Persona> todasLasPersonas = new ArrayList<>(); // Instanciare y guardare las Personas acá 
-    public static ArrayList<Partido> todosLosPartidos = new ArrayList<>(); // Instanciare y guardare los Partidos acá
+    public static ArrayList<Ronda> todasLasRondas = new ArrayList<>(); // Instanciare y guardare las Rondas acá
 
-    /*
-     * public static void main(String[] args) {
-     * 
-     * try {
-     * 
-     * Scanner scan = new Scanner(System.in);
-     * 
-     * BufferedReader lectorResultados = new BufferedReader(new
-     * FileReader("src\\Archivos\\resultados.csv"));
-     * BufferedReader lectorPronosticos = new BufferedReader(new
-     * FileReader("src\\Archivos\\pronosticos.csv"));
-     * 
-     * System.out.println("Ingrese el nombre de la Persona:");
-     * Persona pers = new Persona(scan.nextLine());
-     * 
-     * sumarMostrarResultadoPronostico(lectorResultados, lectorPronosticos, pers);
-     * 
-     * scan.close();
-     * lectorPronosticos.close();
-     * lectorResultados.close();
-     * 
-     * } catch (Exception e) {
-     * // TODO: handle exception
-     * }
-     * 
-     * 
-     * }
-     */
     public static void sumarMostrarResultadoPronostico(BufferedReader lectorResultados,
             BufferedReader lectorPronosticos, Persona pers) {
 
@@ -120,8 +92,9 @@ public class TPI {
             BufferedReader lectorPronosticos = new BufferedReader(new FileReader("src\\Archivos\\pronosticos.csv"));
             BufferedReader lectorResultados = new BufferedReader(new FileReader("src\\Archivos\\resultados.csv"));
             
-            recorrerArchivoPronostico(lectorPronosticos);
-            recorrerArchivoResultado(lectorResultados);
+            recorrerArchivoPronostico(lectorPronosticos); //Instancio Equipos y Personas (con sus pronosticos)
+            recorrerArchivoResultado(lectorResultados); //Instancio Partidos
+            //otroModulo() donde compare Partidos con pronosticos y aumente puntaje de las personas
 
         } catch (Exception e) {
             // TODO: handle exception
@@ -141,13 +114,7 @@ public class TPI {
                 /*
                  * Formato de posición de la información:
                  * PARTICIPANTE;EQUIPO 1;GANA E1;EMPATE;GANA E2;EQUIPO2
-                 * Por lo tanto, la pos 1 y 5 solo nos dicen los nombres de los equipos, y en
-                 * este caso solo necesito la información provista de las posiciones 1 a la 3,
-                 * donde según donde este marcada
-                 * la "X" me dirá cuál equipo marcó como ganador
-                 */
-                
-                
+                 */               
 
                 boolean encontrado1 = false, encontrado2 = false, bandera = false; //Boolean para saber si encontre Equipo 1 y/o Equipo 2
                 int dondeEquipo1 = 0, dondeEquipo2 = 0; //Variables para saber donde tengo guardados (en el arrayList) los Equipos
@@ -196,6 +163,7 @@ public class TPI {
                 if(!personaExiste){ //Si no encontre a la persona, la creo y agrego al arrayList de Personas
                     Persona pers = new Persona(arrPronosticoLinea[0]);
                     todasLasPersonas.add(pers);
+                    dondePersona = todasLasPersonas.size()-1; //Guardo la posición para más adelante
                 }
 
 
@@ -227,16 +195,46 @@ public class TPI {
                 String[] arrResultadoLinea = lineaResultados.split(";");
                 /*
                  * Misma lógica que en pronosticos, con resultados tmb separamos por ";" en un
-                 * arreglo,
-                 * pero la información dada acá es distinta, nos dice el resultado (en goles de
-                 * cada equipo),
+                 * arreglo, pero la información dada acá es distinta, 
+                 * nos dice el resultado (en goles de cada equipo),
                  * por lo tanto debemos analizar en cada caso cual gano.
                  * Formato de posición de la informació:
-                 * EQUIPO 1;GOLES E1;GOLES E2;EQUIPO 2
-                 * Por lo tanto, la pos 0 y 3 nos dicen los nombres de los equipos, y en este
-                 * caso
-                 * solo necesito la información de la pos 1 y 2
+                 * RONDA;EQUIPO 1;GOLES E1;GOLES E2;EQUIPO 2
+                 * MUY IMPORTANTE: Asumiré que las rondas estan ordenadas (de menor a mayor, y arrancando desde 1) en el archivo
                  */
+
+                 //Si la ronda es mayor a las que tengo guardadas en el arrayList de Rondas significa que aún no la cree
+                 if(Integer.parseInt(arrResultadoLinea[0]) > todasLasPersonas.size()){ 
+                    Ronda unaRonda = new Ronda();
+                    todasLasRondas.add(unaRonda);
+                 }
+
+                    int posicionE1 = 0, posicionE2 = 0, i = 0;
+                    boolean encontreE1 = false, encontreE2 = false, encontreAmbos = false;
+                    while (i < todosLosEquipos.size() || !encontreAmbos) { //Recorro hasta que sea menor a la longitud o ya haya encontrado ambos equipos
+                        if (todosLosEquipos.get(i).compararNombre(arrResultadoLinea[1])){ //Si encontro instancia de EQUIPO 1 
+                            encontreE1 = true;
+                            posicionE1 = i; 
+                        }                       
+    
+                        if (todosLosEquipos.get(i).compararNombre(arrResultadoLinea[5])){ //Si encontro instancia de EQUIPO 2
+                            encontreE2 = true;
+                            posicionE2 = i;
+                        }
+    
+                        if(encontreE1 && encontreE2) encontreAmbos = true; //Puedo cortar el while si ya encontre ambos equipos
+    
+                        i++;
+                    }
+
+                    if (Integer.parseInt(arrResultadoLinea[2]) > Integer.parseInt(arrResultadoLinea[3])) { // Si el EQUIPO 1
+                        todasLasRondas.get(Integer.parseInt(arrResultadoLinea[0])-1).agregarPartido(todosLosEquipos.get(posicionE1), todosLosEquipos.get(posicionE2), -1);;
+                    } else if (Integer.parseInt(arrResultadoLinea[2]) < Integer.parseInt(arrResultadoLinea[3])) { // Si el EQUIPO 2 ganó
+                        todasLasRondas.get(Integer.parseInt(arrResultadoLinea[0])-1).agregarPartido(todosLosEquipos.get(posicionE1), todosLosEquipos.get(posicionE2), 1);;
+                    } else { // Si EMPATARON
+                        todasLasRondas.get(Integer.parseInt(arrResultadoLinea[0])-1).agregarPartido(todosLosEquipos.get(posicionE1), todosLosEquipos.get(posicionE2), 0);;      
+                    }
+
             }
             
         } catch (Exception e) {
