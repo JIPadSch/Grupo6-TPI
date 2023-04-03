@@ -53,9 +53,19 @@ public class TPI {
                  * PARTICIPANTE;EQUIPO 1;GANA E1;EMPATE;GANA E2;EQUIPO2
                  */               
 
+                 if(todasLasPersonas.size() == 0){
+                    Persona primerPersona = new Persona(arrPronosticoLinea[0]);
+                    todasLasPersonas.add(primerPersona);
+                 }
+                 if(todosLosEquipos.size() == 0){
+                    Equipo primerEquipo = new Equipo(arrPronosticoLinea[1]);
+                    todosLosEquipos.add(primerEquipo);
+                 }
+
+
                 boolean encontrado1 = false, encontrado2 = false, bandera = false; //Boolean para saber si encontre Equipo 1 y/o Equipo 2
                 int dondeEquipo1 = 0, dondeEquipo2 = 0; //Variables para saber donde tengo guardados (en el arrayList) los Equipos
-                while (i < todosLosEquipos.size() || bandera) { //Recorro hasta que sea menor a la longitud o ya haya encontrado ambos equipos
+                while (i < todosLosEquipos.size() && !bandera) { //Recorro hasta que sea menor a la longitud o ya haya encontrado ambos equipos
                     if (todosLosEquipos.get(i).compararNombre(arrPronosticoLinea[1])){ //Si encontro instancia de EQUIPO 1 
                         //Aviso que NO DEBO crear uno nuevo y guardo la posición para más adelante
                         encontrado1 = true;
@@ -89,8 +99,8 @@ public class TPI {
 
                 boolean personaExiste = false; //Boolean para saber si encontre a la persona
                 int dondePersona = 0; //Variable para saber donde tengo guardado (en el arrayList) la Persona
-                i=0; //Reutilizo la variable para iterar
-                while (i < todasLasPersonas.size() && !personaExiste){ //Recorro hasta que sea menor a la longitud o encuentre a la persona en el arreglo de Personas
+                i = 0; //Reutilizo la variable para iterar
+                while (i < todasLasPersonas.size() && !personaExiste){ //Recorro hasta que sea igual a la longitud o encuentre a la persona en el arreglo de Personas
                     if(todasLasPersonas.get(i).compararNombre(arrPronosticoLinea[0])){ //Si encuentro a la persona
                         //Aviso que NO DEBO crear uno nuevo y guardo la posición para más adelante
                         personaExiste = true;
@@ -147,13 +157,13 @@ public class TPI {
 
                     int posicionE1 = 0, posicionE2 = 0, i = 0;
                     boolean encontreE1 = false, encontreE2 = false, encontreAmbos = false;
-                    while (i < todosLosEquipos.size() || !encontreAmbos) { //Recorro hasta que sea menor a la longitud o ya haya encontrado ambos equipos
+                    while (i < todosLosEquipos.size() && !encontreAmbos) { //Recorro hasta que sea menor a la longitud o ya haya encontrado ambos equipos
                         if (todosLosEquipos.get(i).compararNombre(arrResultadoLinea[1])){ //Si encontro instancia de EQUIPO 1 
                             encontreE1 = true;
                             posicionE1 = i; 
                         }                       
     
-                        if (todosLosEquipos.get(i).compararNombre(arrResultadoLinea[5])){ //Si encontro instancia de EQUIPO 2
+                        if (todosLosEquipos.get(i).compararNombre(arrResultadoLinea[4])){ //Si encontro instancia de EQUIPO 2
                             encontreE2 = true;
                             posicionE2 = i;
                         }
@@ -182,16 +192,19 @@ public class TPI {
 
     public static void analizarPartidosConPronosticos(){
 
-        for (int i = 0; i < todasLasPersonas.size(); i++) { // Itero Personas
+        for (int i = 0; i < todasLasRondas.size(); i++) { // Itero las Rondas
 
-            for (int j = 0; j < todasLasRondas.get(i).getArrayListPartidos().size(); j++) { // Itero Rondas
+            for (int j = 0; j < todasLasPersonas.size(); j++) { // Itero Rondas
 
-                // Si la Persona acertó el resultado del Partido
-                if(todasLasPersonas.get(i).getPronostico().eleccionPronostico(j) == todasLasRondas.get(i).resultadoEnPosicion(j)){
-                    todasLasPersonas.get(i).aumentarPuntaje(); // Le aumento el puntaje
+                for (int t = 0; t < todasLasPersonas.get(j).getPronostico().cantidadPartidosPronosticados(); t++) {
+                    // Si la Persona acertó el resultado del Partido
+                    if(todasLasPersonas.get(j).getPronostico().eleccionPronostico(t) == todasLasRondas.get(i).resultadoEnPosicion(t)){
+                        todasLasPersonas.get(j).aumentarPuntaje(); // Le aumento el puntaje
+                    }
                 }
                 
             }
+
 
         }
 

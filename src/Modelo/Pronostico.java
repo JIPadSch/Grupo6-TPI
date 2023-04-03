@@ -18,6 +18,10 @@ public class Pronostico {
         return this.arrayListPartidos.get(posicion).getResultado();
     }
 
+    public int cantidadPartidosPronosticados(){
+        return this.arrayListPartidos.size();
+    }
+
     /* MODIFICADOR */
 
     public void agregarPartido(Equipo e1, Equipo e2, int eleccionPronostico){
