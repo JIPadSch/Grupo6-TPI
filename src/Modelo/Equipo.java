@@ -17,7 +17,7 @@ public class Equipo {
 
     /* PROPIO DEL TIPO */
 
-    public boolean instanciaExiste(String nombreEquipo){
+    public boolean compararNombre(String nombreEquipo){
         return this.nombre.equals(nombreEquipo);
     }   
 }

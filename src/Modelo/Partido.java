@@ -5,6 +5,8 @@ public class Partido {
     private Equipo equipo2;
     private int resultado; //Gano equipo 1 = -1, gano equipo 2 = 1, empate = 0
 
+    /* CONSTRUCTOR */
+
     public Partido(Equipo e1, Equipo e2){
         this.equipo1 = e1;
         this.equipo2 = e2;
@@ -25,10 +27,16 @@ public class Partido {
         return this.resultado;
     }
 
+    /* MODIFICADOR */
+
+    public void setResultado(int resultado){
+        this.resultado = resultado;
+    }
+
 
     /* PROPIO DEL TIPO */
 
-    public boolean equals(Partido partidoPronostico){
+    public boolean compararResultado(Partido partidoPronostico){
         return (this.resultado == partidoPronostico.getResultado());
     }
 

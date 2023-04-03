@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import Modelo.Equipo;
+import Modelo.Partido;
 import Modelo.Persona;
 
 /**
@@ -17,6 +18,10 @@ import Modelo.Persona;
  */
 
 public class TPI {
+
+    public static ArrayList<Equipo> todosLosEquipos = new ArrayList<>();   // Instanciare y guardare los Equipos acá
+    public static ArrayList<Persona> todasLasPersonas = new ArrayList<>(); // Instanciare y guardare las Personas acá 
+    public static ArrayList<Partido> todosLosPartidos = new ArrayList<>(); // Instanciare y guardare los Partidos acá
 
     /*
      * public static void main(String[] args) {
@@ -110,28 +115,115 @@ public class TPI {
 
     public static void main(String[] args) {
 
-        try {
+        try {           
 
-            ArrayList<Equipo> todosLosEquipos = new ArrayList<>();
-
-            BufferedReader lectorResultados = new BufferedReader(new FileReader("src\\Archivos\\resultados.csv"));
             BufferedReader lectorPronosticos = new BufferedReader(new FileReader("src\\Archivos\\pronosticos.csv"));
+            BufferedReader lectorResultados = new BufferedReader(new FileReader("src\\Archivos\\resultados.csv"));
+            
+            recorrerArchivoPronostico(lectorPronosticos);
+            recorrerArchivoResultado(lectorResultados);
 
-            String lineaPronosticos;
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
 
+    }
+
+    public static void recorrerArchivoPronostico(BufferedReader lectorPronosticos){
+
+        String lineaPronosticos;
+
+        try {
             while ((lineaPronosticos = lectorPronosticos.readLine()) != null) {
-                String lineaResultados = lectorResultados.readLine();
 
+                int i = 0; //Entero que utilizare para iterar más adelante
                 String[] arrPronosticoLinea = lineaPronosticos.split(";");
                 /*
                  * Formato de posición de la información:
-                 * EQUIPO 1;GANA E1;EMPATE;GANA E2;EQUIPO2
-                 * Por lo tanto, la pos 0 y 4 solo nos dicen los nombres de los equipos, y en
-                 * este caso solo
-                 * necesito la información provista de las posiciones 1 a la 3, donde según
-                 * donde este marcada
+                 * PARTICIPANTE;EQUIPO 1;GANA E1;EMPATE;GANA E2;EQUIPO2
+                 * Por lo tanto, la pos 1 y 5 solo nos dicen los nombres de los equipos, y en
+                 * este caso solo necesito la información provista de las posiciones 1 a la 3,
+                 * donde según donde este marcada
                  * la "X" me dirá cuál equipo marcó como ganador
                  */
+                
+                
+
+                boolean encontrado1 = false, encontrado2 = false, bandera = false; //Boolean para saber si encontre Equipo 1 y/o Equipo 2
+                int dondeEquipo1 = 0, dondeEquipo2 = 0; //Variables para saber donde tengo guardados (en el arrayList) los Equipos
+                while (i < todosLosEquipos.size() || bandera) { //Recorro hasta que sea menor a la longitud o ya haya encontrado ambos equipos
+                    if (todosLosEquipos.get(i).compararNombre(arrPronosticoLinea[1])){ //Si encontro instancia de EQUIPO 1 
+                        //Aviso que NO DEBO crear uno nuevo y guardo la posición para más adelante
+                        encontrado1 = true;
+                        dondeEquipo1 = i; 
+                    }                       
+
+                    if (todosLosEquipos.get(i).compararNombre(arrPronosticoLinea[5])){ //Si encontro instancia de EQUIPO 2
+                        //Aviso que NO DEBO crear uno nuevo y guardo la posición para más adelante
+                        encontrado2 = true;
+                        dondeEquipo2 = i;
+                    }
+
+                    if(encontrado1 && encontrado2) bandera = true; //Puedo cortar el while si ya encontre ambos equipos
+
+                    i++;
+                }
+
+                if (!encontrado1) { //Si no encontre EQUIPO 1, lo creo y agrego al arrayList de Equipos
+                    Equipo equipo = new Equipo(arrPronosticoLinea[1]);
+                    todosLosEquipos.add(equipo);
+                    dondeEquipo1 = todosLosEquipos.size()-1; //Guardo la posición para más adelante
+                }
+
+                if (!encontrado2) { //Si no encontre EQUIPO 2, lo creo y agrego al arrayList de Equipos
+                    Equipo equipo = new Equipo(arrPronosticoLinea[5]);
+                    todosLosEquipos.add(equipo);
+                    dondeEquipo2 = todosLosEquipos.size()-1; //Guardo la posición para más adelante
+                }
+
+                boolean personaExiste = false; //Boolean para saber si encontre a la persona
+                int dondePersona = 0; //Variable para saber donde tengo guardado (en el arrayList) la Persona
+                i=0; //Reutilizo la variable para iterar
+                while (i < todasLasPersonas.size() && !personaExiste){ //Recorro hasta que sea menor a la longitud o encuentre a la persona en el arreglo de Personas
+                    if(todasLasPersonas.get(i).compararNombre(arrPronosticoLinea[0])){ //Si encuentro a la persona
+                        //Aviso que NO DEBO crear uno nuevo y guardo la posición para más adelante
+                        personaExiste = true;
+                        dondePersona = i;
+                    }
+                    i++;
+                }
+
+                if(!personaExiste){ //Si no encontre a la persona, la creo y agrego al arrayList de Personas
+                    Persona pers = new Persona(arrPronosticoLinea[0]);
+                    todasLasPersonas.add(pers);
+                }
+
+
+                if (arrPronosticoLinea[2].equals("X")) {       // Si la persona eligió gana EQUIPO 1
+                    todasLasPersonas.get(dondePersona).agregarPronostico(todosLosEquipos.get(dondeEquipo1),todosLosEquipos.get(dondeEquipo2),-1);
+                }else if (arrPronosticoLinea[3].equals("X")) { // Si la persona eligió EMPATE
+                    todasLasPersonas.get(dondePersona).agregarPronostico(todosLosEquipos.get(dondeEquipo1),todosLosEquipos.get(dondeEquipo2),0);
+                }else if (arrPronosticoLinea[4].equals("X")) { // Si la persona eligió gana EQUIPO 2
+                    todasLasPersonas.get(dondePersona).agregarPronostico(todosLosEquipos.get(dondeEquipo1),todosLosEquipos.get(dondeEquipo2),1);
+                }
+
+
+            }
+            
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+            
+
+    }
+
+    public static void recorrerArchivoResultado( BufferedReader lectorResultados){
+        
+        try {
+
+            String lineaResultados;
+            while ((lineaResultados = lectorResultados.readLine()) != null) {
+    
                 String[] arrResultadoLinea = lineaResultados.split(";");
                 /*
                  * Misma lógica que en pronosticos, con resultados tmb separamos por ";" en un
@@ -145,35 +237,13 @@ public class TPI {
                  * caso
                  * solo necesito la información de la pos 1 y 2
                  */
-                int i = 0;
-
-                boolean encontrado1 = false;
-                boolean encontrado2 = false;
-                while (i < todosLosEquipos.size() && (!encontrado1 || !encontrado2)) {
-                    if (todosLosEquipos.get(i).instanciaExiste(arrResultadoLinea[0])){
-                        encontrado1 = true;
-                    }                       
-
-                    if (todosLosEquipos.get(i).instanciaExiste(arrResultadoLinea[3])){
-                        encontrado2 = true;
-                    }
-                }
-
-                if (!encontrado1) {
-                    Equipo equipo = new Equipo(arrResultadoLinea[0]);
-                    todosLosEquipos.add(equipo);
-                }
-
-                if (!encontrado2) {
-                    Equipo equipo = new Equipo(arrResultadoLinea[3]);
-                    todosLosEquipos.add(equipo);
-                }
-
             }
-
+            
         } catch (Exception e) {
             // TODO: handle exception
         }
 
+ 
     }
+
 }
