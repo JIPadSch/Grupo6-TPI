@@ -25,8 +25,7 @@ public class Ronda {
     /* PROPIO DEL TIPO */
 
     public void agregarPartido(Equipo e1, Equipo e2, int resultado){
-        Partido partido = new Partido(e1, e2);
-        partido.setResultado(resultado);
+        Partido partido = new Partido(e1, e2, resultado);
         this.arrayListPartidos.add(partido);
     }
     

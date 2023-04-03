@@ -68,7 +68,9 @@ public class TPI {
                         dondeEquipo2 = i;
                     }
 
-                    if(encontrado1 && encontrado2) bandera = true; //Puedo cortar el while si ya encontre ambos equipos
+                    if(encontrado1 && encontrado2){
+                        bandera = true; //Puedo cortar el while si ya encontre ambos equipos
+                    } 
 
                     i++;
                 }
@@ -103,7 +105,6 @@ public class TPI {
                     dondePersona = todasLasPersonas.size()-1; //Guardo la posición para más adelante
                 }
 
-
                 if (arrPronosticoLinea[2].equals("X")) {       // Si la persona eligió gana EQUIPO 1
                     todasLasPersonas.get(dondePersona).agregarPronostico(todosLosEquipos.get(dondeEquipo1),todosLosEquipos.get(dondeEquipo2),-1);
                 }else if (arrPronosticoLinea[3].equals("X")) { // Si la persona eligió EMPATE
@@ -111,7 +112,6 @@ public class TPI {
                 }else if (arrPronosticoLinea[4].equals("X")) { // Si la persona eligió gana EQUIPO 2
                     todasLasPersonas.get(dondePersona).agregarPronostico(todosLosEquipos.get(dondeEquipo1),todosLosEquipos.get(dondeEquipo2),1);
                 }
-
 
             }
             
@@ -124,26 +124,25 @@ public class TPI {
 
     public static void recorrerArchivoResultado(BufferedReader lectorResultados){
         
+        String lineaResultados;
+
         try {
 
-            String lineaResultados;
             while ((lineaResultados = lectorResultados.readLine()) != null) {
     
                 String[] arrResultadoLinea = lineaResultados.split(";");
                 /*
                  * Misma lógica que en pronosticos, con resultados tmb separamos por ";" en un
-                 * arreglo, pero la información dada acá es distinta, 
-                 * nos dice el resultado (en goles de cada equipo),
-                 * por lo tanto debemos analizar en cada caso cual gano.
+                 * arreglo, pero la información dada acá es distinta.
                  * Formato de posición de la informació:
                  * RONDA;EQUIPO 1;GOLES E1;GOLES E2;EQUIPO 2
                  * MUY IMPORTANTE: Asumiré que las rondas estan ordenadas (de menor a mayor, y arrancando desde 1) en el archivo
                  */
 
                  //Si la ronda es mayor a las que tengo guardadas en el arrayList de Rondas significa que aún no la cree
-                 if(Integer.parseInt(arrResultadoLinea[0]) > todasLasPersonas.size()){ 
-                    Ronda unaRonda = new Ronda();
-                    todasLasRondas.add(unaRonda);
+                 if(Integer.parseInt(arrResultadoLinea[0]) > todasLasRondas.size()){ 
+                    Ronda nuevRonda = new Ronda();
+                    todasLasRondas.add(nuevRonda);
                  }
 
                     int posicionE1 = 0, posicionE2 = 0, i = 0;
@@ -183,13 +182,13 @@ public class TPI {
 
     public static void analizarPartidosConPronosticos(){
 
-        for (int i = 0; i < todasLasPersonas.size(); i++) { //Itero Personas
+        for (int i = 0; i < todasLasPersonas.size(); i++) { // Itero Personas
 
-            for (int j = 0; j < todasLasRondas.get(i).getArrayListPartidos().size(); j++) { //Itero Rondas
+            for (int j = 0; j < todasLasRondas.get(i).getArrayListPartidos().size(); j++) { // Itero Rondas
 
-                //Si la Persona acertó el resultado del Partido
+                // Si la Persona acertó el resultado del Partido
                 if(todasLasPersonas.get(i).getPronostico().eleccionPronostico(j) == todasLasRondas.get(i).resultadoEnPosicion(j)){
-                    todasLasPersonas.get(i).aumentarPuntaje();
+                    todasLasPersonas.get(i).aumentarPuntaje(); // Le aumento el puntaje
                 }
                 
             }
@@ -199,6 +198,7 @@ public class TPI {
     }
 
     public static void mostrarPuntajePersonas(){
+        // Iteracion de Personas y muestro sus datos
         for (int i = 0; i < todasLasPersonas.size(); i++) {
             System.out.println(todasLasPersonas.get(i).toString());
         }

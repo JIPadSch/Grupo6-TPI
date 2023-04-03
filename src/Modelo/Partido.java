@@ -5,12 +5,18 @@ public class Partido {
     private Equipo equipo2;
     private int resultado; //GANO EQUIPO 1 = -1, GANO EQUIPO 2 = 1, EMPATE = 0
 
-    /* CONSTRUCTOR */
+    /* CONSTRUCTORES */
 
     public Partido(Equipo e1, Equipo e2){
         this.equipo1 = e1;
         this.equipo2 = e2;
         this.resultado = 0;
+    }
+
+    public Partido(Equipo e1, Equipo e2, int resultado){
+        this.equipo1 = e1;
+        this.equipo2 = e2;
+        this.resultado = resultado;
     }
     
     /* OBSERVADORES */

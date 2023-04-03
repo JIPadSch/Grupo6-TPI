@@ -21,8 +21,7 @@ public class Pronostico {
     /* MODIFICADOR */
 
     public void agregarPartido(Equipo e1, Equipo e2, int eleccionPronostico){
-        Partido partido = new Partido(e1, e2);
-        partido.setResultado(eleccionPronostico);
+        Partido partido = new Partido(e1, e2,eleccionPronostico);
         this.arrayListPartidos.add(partido);
     }
     
