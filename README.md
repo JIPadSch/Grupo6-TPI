@@ -4,8 +4,7 @@
 - Maximiliano Sorano
 - Agustina Birn
 - Mailen da Silva
-<br>
-**Mencion especial: Santiago Scantamburlo**
+- **Mencion especial: Santiago Scantamburlo**
 
 ## Devolución del Profesor en la 1ra Entrega:
 
