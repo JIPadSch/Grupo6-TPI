@@ -7,7 +7,7 @@ public class Fase {
     private ArrayList<Ronda> arrayRonda;
 
     /* CONSTRUCTOR */
-    
+
     public Fase(){
         arrayRonda = new ArrayList<>();
     }
