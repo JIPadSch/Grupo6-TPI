@@ -24,4 +24,16 @@ Muy bien chicos! Felicitaciones! sigan así para la próxima entrega.
 Intenten trabajar entre todos para pensar la nueva solución.
 
 ## Devolución del Profesor en la 2da Entrega:
-...
+Felicitaciones equipo.
+El trabajo esta muy bien, bien definidas las clases y los metodos.
+Me gusta que vayan explicando con comentarios los flujos que consideran necesarios.
+Bien separadas las funcionalidades en distintos metodos.
+
+Acuerdense que deben realizar algun Test como vieron en clase.
+Ademas deben migrar a Maven el proyecto.
+
+Aclaracion: en Java le solemos llamar Getters y Setters a lo que ustedes le llaman observadores y modificadores respectivamente. Para que lo tengan en cuenta.
+
+Muy buena mejora en cuanto a la entrega anterior!
+
+Sigan asi! Solo queda la ultima entrega!
