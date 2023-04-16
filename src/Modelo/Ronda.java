@@ -22,6 +22,10 @@ public class Ronda {
         return this.arrayListPartidos.get(posicion).getResultado();
     }
 
+    public int tamanio(){
+        return this.arrayListPartidos.size();
+    }
+
     /* PROPIO DEL TIPO */
 
     public void agregarPartido(Equipo e1, Equipo e2, int resultado){

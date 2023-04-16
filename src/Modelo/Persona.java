@@ -4,13 +4,15 @@ public class Persona {
     private String nombre;
     private int puntaje;
     private Pronostico pronosticoPartidos;
+    private int puntoPorPartido; //Ahora se puede elegir cuantos puntos se ganaran con Pronostico Acertado
 
     /* CONSTRUCTOR */
 
-    public Persona(String nombre){
+    public Persona(String nombre, int puntoPorPartido){
         this.nombre = nombre;
         this.puntaje = 0;
         this.pronosticoPartidos = new Pronostico();
+        this.puntoPorPartido = puntoPorPartido;
     }
 
     /* OBSERVADORES */
@@ -27,6 +29,10 @@ public class Persona {
         return this.pronosticoPartidos;
     }
 
+    public int getPuntoPorPartido(){
+        return this.puntoPorPartido;
+    }
+
     /* MODIFICADORES */
 
     public void setPuntaje(int puntajeNuevo){
@@ -41,10 +47,22 @@ public class Persona {
         this.pronosticoPartidos.agregarPartido(e1,e2,eleccionPronostico);
     }
 
+    public void setPuntoPartido(int puntoPorPartido){
+        this.puntoPorPartido = puntoPorPartido;
+    }
+
     /* PROPIO DEL TIPO */
 
     public void aumentarPuntaje(){
-        this.puntaje++;
+        this.puntaje += this.puntoPorPartido;
+    }
+
+    public void aumentarPuntajeAciertoRondaCompleta(){
+        this.puntaje += (this.puntoPorPartido * 2);
+    }
+
+    public void aumentarPuntajeAciertoFaseCompleta(){
+        this.puntaje += (this.puntoPorPartido * 3);
     }
 
     public String toString(){

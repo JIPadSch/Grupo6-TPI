@@ -1,10 +1,12 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import Modelo.Equipo;
 import Modelo.Persona;
 import Modelo.Ronda;
+import Modelo.Fase;
 
 /**
  * @author
@@ -19,16 +21,25 @@ public class TPI {
 
     public static ArrayList<Equipo> todosLosEquipos = new ArrayList<>();   // Instanciaré y guardaré los Equipos acá
     public static ArrayList<Persona> todasLasPersonas = new ArrayList<>(); // Instanciaré y guardaré las Personas acá 
-    public static ArrayList<Ronda> todasLasRondas = new ArrayList<>();     // Instanciaré y guardaré las Rondas acá
-
+    public static ArrayList<Fase> todasLasFases = new ArrayList<>();       // Instanciaré y guardaré las Fases
     public static void main(String[] args) {
 
         try {           
 
             BufferedReader lectorPronosticos = new BufferedReader(new FileReader("src\\Archivos\\pronosticos.csv"));
             BufferedReader lectorResultados = new BufferedReader(new FileReader("src\\Archivos\\resultados.csv"));
+
+            int puntajePartidoAcertado = 0;
+            Scanner scan = new Scanner(System.in);
+            do{
+                System.out.println("¿Cuantos puntos por Partido acertado deberá ganar una persona?:");
+                puntajePartidoAcertado = scan.nextInt();
+
+                if(puntajePartidoAcertado < 1) System.out.println("ERROR: El puntaje no puede ser menor de 1");
+
+            }while (puntajePartidoAcertado < 1);
             
-            recorrerArchivoPronostico(lectorPronosticos); //Instancio Equipos y Personas (con sus Pronosticos)
+            recorrerArchivoPronostico(lectorPronosticos, puntajePartidoAcertado); //Instancio Equipos y Personas (con sus Pronosticos)
             recorrerArchivoResultado(lectorResultados); //Instancio Rondas (con sus Partidos)
             analizarPartidosConPronosticos(); //Comparo Partidos (ubicado en Rondas) con Pronosticos (ubicado en Personas) y aumento puntaje de las personas según corresponda
             mostrarPuntajePersonas();
@@ -39,7 +50,7 @@ public class TPI {
 
     }
 
-    public static void recorrerArchivoPronostico(BufferedReader lectorPronosticos){
+    public static void recorrerArchivoPronostico(BufferedReader lectorPronosticos, int puntajePartidoAcertado){
 
         String lineaPronosticos;
 
@@ -54,7 +65,7 @@ public class TPI {
                  */               
 
                  if(todasLasPersonas.size() == 0){ //Si es el caso de la 1er Persona, la instancio y guardo
-                    Persona primerPersona = new Persona(arrPronosticoLinea[0]);
+                    Persona primerPersona = new Persona(arrPronosticoLinea[0],puntajePartidoAcertado);
                     todasLasPersonas.add(primerPersona);
                  }
                  if(todosLosEquipos.size() == 0){ //Si es el caso del 1er Equipo, lo instancio y guardo
@@ -110,7 +121,7 @@ public class TPI {
                 }
 
                 if(!personaExiste){ //Si no encontre a la persona, la creo y agrego al arrayList de Personas
-                    Persona pers = new Persona(arrPronosticoLinea[0]);
+                    Persona pers = new Persona(arrPronosticoLinea[0],puntajePartidoAcertado);
                     todasLasPersonas.add(pers);
                     dondePersona = todasLasPersonas.size()-1; //Guardo la posición para más adelante
                 }
@@ -146,26 +157,32 @@ public class TPI {
                  * Misma lógica que en pronosticos, con resultados tmb separamos por ";" en un
                  * arreglo, pero la información dada acá es distinta.
                  * Formato de posición de la informació:
-                 * RONDA;EQUIPO 1;GOLES E1;GOLES E2;EQUIPO 2
-                 * MUY IMPORTANTE: Asumiré que las rondas estan ordenadas (de menor a mayor, y arrancando desde 1) en el archivo
+                 * FASE;RONDA;EQUIPO 1;GOLES E1;GOLES E2;EQUIPO 2
+                 * MUY IMPORTANTE: Asumiré que las fases y rondas estan ordenadas (de menor a mayor, y arrancando desde 1) en el archivo
                  */
 
-                 //Si la ronda es mayor a las que tengo guardadas en el arrayList de Rondas significa que aún no la cree
-                 if(Integer.parseInt(arrResultadoLinea[0]) > todasLasRondas.size()){ 
-                    Ronda nuevRonda = new Ronda();
-                    todasLasRondas.add(nuevRonda);
+                 //Si la fase es mayor a las que tengo guardadas en el arrayList de Fases significa que aún no la cree
+                 if(Integer.parseInt(arrResultadoLinea[0]) > todasLasFases.size()){
+                    Fase nuevaFase = new Fase();
+                    todasLasFases.add(nuevaFase);
+                 }
+
+                 //Si la ronda es mayor a las que tengo guardadas en la Fase que estoy, significa que aún no la cree
+                 if(Integer.parseInt(arrResultadoLinea[1]) > todasLasFases.get(Integer.parseInt(arrResultadoLinea[0])).tamanio()){ 
+                    Ronda nuevaRonda = new Ronda();
+                    todasLasFases.get(Integer.parseInt(arrResultadoLinea[0])).agregarRonda(nuevaRonda);
                  }
 
                     int posicionE1 = 0, posicionE2 = 0, i = 0;
                     boolean encontreE1 = false, encontreE2 = false, encontreAmbos = false;
                     while (i < todosLosEquipos.size() && !encontreAmbos) { //Recorro hasta que sea menor a la longitud o ya haya encontrado ambos equipos
-                        if (todosLosEquipos.get(i).compararNombre(arrResultadoLinea[1])){ //Si encontro instancia de EQUIPO 1 
+                        if (todosLosEquipos.get(i).compararNombre(arrResultadoLinea[2])){ //Si encontro instancia de EQUIPO 1 
                             //Aviso que lo encontré y guardo la posición
                             encontreE1 = true;
                             posicionE1 = i; 
                         }                       
     
-                        if (todosLosEquipos.get(i).compararNombre(arrResultadoLinea[4])){ //Si encontro instancia de EQUIPO 2
+                        if (todosLosEquipos.get(i).compararNombre(arrResultadoLinea[5])){ //Si encontro instancia de EQUIPO 2
                             //Aviso que lo encontré y guardo la posición
                             encontreE2 = true;
                             posicionE2 = i;
@@ -176,12 +193,12 @@ public class TPI {
                         i++;
                     }
 
-                    if (Integer.parseInt(arrResultadoLinea[2]) > Integer.parseInt(arrResultadoLinea[3])) {        // Si el EQUIPO 1 ganó
-                        todasLasRondas.get(Integer.parseInt(arrResultadoLinea[0])-1).agregarPartido(todosLosEquipos.get(posicionE1), todosLosEquipos.get(posicionE2), -1);;
-                    } else if (Integer.parseInt(arrResultadoLinea[2]) < Integer.parseInt(arrResultadoLinea[3])) { // Si el EQUIPO 2 ganó
-                        todasLasRondas.get(Integer.parseInt(arrResultadoLinea[0])-1).agregarPartido(todosLosEquipos.get(posicionE1), todosLosEquipos.get(posicionE2), 1);;
+                    if (Integer.parseInt(arrResultadoLinea[3]) > Integer.parseInt(arrResultadoLinea[4])) {        // Si el EQUIPO 1 ganó
+                        todasLasFases.get(Integer.parseInt(arrResultadoLinea[0])).getRondaEnPosicion(Integer.parseInt(arrResultadoLinea[1])-1).agregarPartido(todosLosEquipos.get(posicionE1), todosLosEquipos.get(posicionE2), -1);;
+                    } else if (Integer.parseInt(arrResultadoLinea[3]) < Integer.parseInt(arrResultadoLinea[4])) { // Si el EQUIPO 2 ganó
+                        todasLasFases.get(Integer.parseInt(arrResultadoLinea[0])).getRondaEnPosicion(Integer.parseInt(arrResultadoLinea[1])-1).agregarPartido(todosLosEquipos.get(posicionE1), todosLosEquipos.get(posicionE2), 1);;
                     } else {                                                                                      // Si EMPATARON
-                        todasLasRondas.get(Integer.parseInt(arrResultadoLinea[0])-1).agregarPartido(todosLosEquipos.get(posicionE1), todosLosEquipos.get(posicionE2), 0);;      
+                        todasLasFases.get(Integer.parseInt(arrResultadoLinea[0])).getRondaEnPosicion(Integer.parseInt(arrResultadoLinea[1])-1).agregarPartido(todosLosEquipos.get(posicionE1), todosLosEquipos.get(posicionE2), 0);;      
                     }
 
             }
@@ -194,21 +211,40 @@ public class TPI {
     }
 
     public static void analizarPartidosConPronosticos(){
+        int contadorPartidoPorRondaAcertado = 0, contadorRondaCompletasAcertadas = 0;
+        //Si Persona acerto todos los resultados en la ROnda; persona.aumentarPuntajeAciertoRondaCompleta();
+        //Si Persona acerto todos los resultados en la Fase; persona.aumentarPuntajeAciertoFaseCompleta();
+        for (int e = 0; e < todasLasFases.size(); e++){ //Itero las Fases
 
-        for (int i = 0; i < todasLasRondas.size(); i++) { // Itero las Rondas
+            for (int i = 0; i < todasLasFases.get(e).tamanio(); i++) { // Itero las Rondas
 
-            for (int j = 0; j < todasLasPersonas.size(); j++) { // Itero Personas
-
-                for (int t = 0; t < todasLasPersonas.get(j).getPronostico().cantidadPartidosPronosticados(); t++) {
-                    // Si la Persona acertó el resultado del Partido
-                    if(todasLasPersonas.get(j).getPronostico().eleccionPronostico(t) == todasLasRondas.get(i).resultadoEnPosicion(t)){
-                        todasLasPersonas.get(j).aumentarPuntaje(); // Le aumento el puntaje
+                for (int j = 0; j < todasLasPersonas.size(); j++) { // Itero las Personas
+    
+                    for (int t = 0; t < todasLasPersonas.get(j).getPronostico().cantidadPartidosPronosticados(); t++) { // Itero Pronosticos
+                        // Si la Persona acertó el resultado del Partido
+                        if(todasLasPersonas.get(j).getPronostico().eleccionPronostico(t) == todasLasFases.get(e).getRondaEnPosicion(i).resultadoEnPosicion(t)){
+                            todasLasPersonas.get(j).aumentarPuntaje(); // Le aumento el puntaje
+                            contadorPartidoPorRondaAcertado++;
+                        }
                     }
+            
+                    /* if(contadorPartidoPorRondaAcertado == todasLasFases.get(e).getRondaEnPosicion(i).tamanio()){
+                        todasLasPersonas.get(j).aumentarPuntajeAciertoRondaCompleta();
+                        contadorRondaCompletasAcertadas++;
+                        
+                        if(contadorRondaCompletasAcertadas == todasLasFases.get(e).tamanio()){
+                            todasLasPersonas.get(j).aumentarPuntajeAciertoFaseCompleta();
+                        }
+                        
+                    }
+
+                    contadorPartidoPorRondaAcertado = 0; */
+                    
                 }
-                
+
+    
             }
-
-
+            
         }
 
     }
