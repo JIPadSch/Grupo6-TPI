@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.sql.*;
 
 import Modelo.Equipo;
 import Modelo.Persona;
@@ -11,10 +12,6 @@ import Modelo.Fase;
 /**
  * @author
  *         Juan Ignacio Padron Schneider
- *         Victoria de Goycoechea
- *         Maximiliano Sorano
- *         Agustina Birn
- *         Mailen da Silva
  */
 
 public class TPI {
@@ -23,6 +20,27 @@ public class TPI {
     public static ArrayList<Persona> todasLasPersonas = new ArrayList<>(); // Instanciaré y guardaré las Personas acá 
     public static ArrayList<Fase> todasLasFases = new ArrayList<>();       // Instanciaré y guardaré las Fases
     public static void main(String[] args) {
+
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/tpi", "root", "root");
+            Statement stmt = con.createStatement();
+            System.out.println("Nos logramos conectar bro");
+
+            /* ResultSet rs = stmt.executeQuery("PONGA AQUI SU QUERY");
+            while(rs.next());
+            System.out.println(rs.getInt(1)+" "+rs.getString(2)+" "+rs.getString(3));
+
+            int result = stmt.executeUpdate("delete from emp where id=33");
+            System.out.println(result + " records affected"); */
+
+            con.close();
+
+        }catch(SQLException e){
+            System.out.println(e.getMessage()+": ERROR al conectarse a la BD");
+        }catch(ClassNotFoundException e){
+            System.out.println(e.getMessage()+": OTRO ERROR");
+        }
 
         try {           
 

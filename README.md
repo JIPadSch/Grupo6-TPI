@@ -1,10 +1,6 @@
 # Integrantes del Grupo:
 - Juan Ignacio Padron Schneider
-- Victoria de Goycoechea
-- Maximiliano Sorano
-- Agustina Birn
-- Mailen da Silva
-- **Mencion especial: Santiago Scantamburlo**
+- **Mencion especial: [Santiago Scantamburlo](https://github.com/santiagoScantamburlo)**
 
 ## Devolución del Profesor en la 1ra Entrega:
 
