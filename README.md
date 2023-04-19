@@ -1,9 +1,5 @@
 # Integrantes del Grupo:
 - Juan Ignacio Padron Schneider
-- Victoria de Goycoechea
-- Maximiliano Sorano
-- Agustina Birn
-- Mailen da Silva
 - **Mencion especial: Santiago Scantamburlo**
 
 ## Devolución del Profesor en la 1ra Entrega:
@@ -22,6 +18,3 @@ El trabajo fue entregado en tiempo y forma.
 
 Muy bien chicos! Felicitaciones! sigan así para la próxima entrega. 
 Intenten trabajar entre todos para pensar la nueva solución.
-
-## Devolución del Profesor en la 2da Entrega:
-...
